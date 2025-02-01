@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+<head><title>Link Shortener</title>
+</head>
+<body>
+<h1>Link Shortener</h1>
+
+{% with messages = get_flashed_messages() %}
+{% if messages %}
+<ul class=flashes>
+    {% for message in messages %}
+    <li>{{ message }}</li>
+    {% endfor %}
+</ul>
+{% endif %}
+{% endwith %}
+
+<form method="POST">
+    <label for="url">Enter URL:</label>
+    <input type="url" name="url" id="url" required>
+    <button type="submit">Shorten</button>
+</form>
+
+</body>
+</html>

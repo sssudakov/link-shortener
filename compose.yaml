@@ -1,0 +1,30 @@
+services:
+  web:
+    build: .
+    ports:
+      - "8001:8000"
+    environment:
+      - DATABASE_URL=postgresql://user:password@db:5432/link_shortener
+      - REDIS_URL=redis://redis:6379/0
+      - PYTHONPATH=/app
+    depends_on:
+      - db
+      - redis
+
+  db:
+    ports:
+      - "5432:5432"
+    image: postgres:14
+    environment:
+      - POSTGRES_USER=user
+      - POSTGRES_PASSWORD=password
+      - POSTGRES_DB=link_shortener
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./db-data:/docker-entrypoint-initdb.d
+
+  redis:
+    image: redis:latest
+
+volumes:
+  postgres_data:
