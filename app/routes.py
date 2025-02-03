@@ -1,4 +1,4 @@
-from flask import Blueprint, render_template, redirect, request, url_for, flash
+from flask import Blueprint, render_template, redirect, request, url_for, flash, current_app
 from app import db
 from app.models import Link
 from app.utils import generate_short_code
@@ -35,9 +35,20 @@ def index():
 
 @bp.route('/<string:code>')
 def redirect_to_url(code):
+    cached_url = current_app.redis.get(code)
+    if cached_url:
+        url = cached_url.decode('utf-8')
+        link = Link.query.filter_by(short_code=code).first_or_404()
+        link.clicks += 1
+        db.session.commit()
+        return redirect(url)
+
+
     link = Link.query.filter_by(short_code=code).first_or_404()
+    current_app.redis.setex(code, 3600, link.original_url)
     link.clicks += 1
     db.session.commit()
+
     return redirect(link.original_url)
 
 

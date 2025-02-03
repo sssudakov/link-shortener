@@ -8,4 +8,4 @@ RUN pip install -r requirements.txt
 
 COPY . .
 
-CMD ["gunicorn", "--bind", "0.0.0.0:8000", "run:app"]
+#CMD ["gunicorn", "--bind", "0.0.0.0:8000", "--log-file=-", "--log-level=debug", "run:app"] # for production
