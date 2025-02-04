@@ -8,3 +8,4 @@ class Link(db.Model):
     short_code = db.Column(db.String, unique=True, nullable=False)
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
     clicks = db.Column(db.Integer, default=0)
+    deleted_at = db.Column(db.DateTime, nullable=True)
