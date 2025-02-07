@@ -25,20 +25,21 @@ def create_short_link(original_url):
 
 def get_original_url(code):
     link_repo = LinkRepository(db.session)
-
     cached_url = current_app.redis.get(code)
+
     if cached_url:
         url = cached_url.decode('utf-8')
+    else:
         link = link_repo.get_by_short_code(code)
-        link_repo.increment_clicks(link)
-        return url
+        if not link:
+            raise NotFound(description=f"Link with code '{code}' not found")
 
-    original_url = link_repo.get_original_url_by_short_code(code)
-    current_app.redis.setex(code, 3600, original_url)
-    link = link_repo.get_by_short_code(code)
-    link_repo.increment_clicks(link)
+        current_app.redis.setex(code, 3600, link.original_url)
+        url = link.original_url
 
-    return original_url
+    current_app.redis.incr(f"clicks:{code}")
+
+    return url
 
 def get_link_by_code(code):
     link_repo = LinkRepository(db.session)

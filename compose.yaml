@@ -13,8 +13,29 @@ services:
       - redis
     volumes:
       - ./app:/app/app # for development
+      - ./logs:/app/logs
     networks:
       - app_net
+
+  worker:
+    build: .
+    command: rq worker -u redis://redis:6379/0 link-shortener-tasks
+    depends_on:
+      - redis
+    networks:
+      - app_net
+    environment:
+      - REDIS_URL=redis://redis:6379/0
+
+  scheduler:
+    build: .
+    command: rqscheduler -u redis://redis:6379/0 --interval 60
+    depends_on:
+      - redis
+    networks:
+      - app_net
+    environment:
+      - REDIS_URL=redis://redis:6379/0
 
   db:
     ports:
