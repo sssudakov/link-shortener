@@ -9,3 +9,4 @@ redis
 pytest
 rq
 rq-scheduler
+shortuuid

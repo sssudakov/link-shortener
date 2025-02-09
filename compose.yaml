@@ -65,10 +65,10 @@ services:
     environment:
       - DATABASE_URL=postgresql://user:password@db:5432/link_shortener
       - REDIS_URL=redis://redis:6379/0
-      - PYTHONPATH=/app
       - MIGRATIONS_DIR=migrations
     depends_on:
-      - web
+      - db
+      - redis
     networks:
       - app_net
 

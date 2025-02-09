@@ -1,5 +1,3 @@
-from dis import show_code
-
 from app import db
 from app.models import Link
 from flask import url_for
