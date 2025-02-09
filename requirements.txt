@@ -10,3 +10,4 @@ pytest
 rq
 rq-scheduler
 shortuuid
+flask-restx

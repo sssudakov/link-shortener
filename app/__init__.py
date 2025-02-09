@@ -37,6 +37,9 @@ def create_app(config_class=Config):
     from app.routes import bp as routes_bp
     app.register_blueprint(routes_bp)
 
+    from app.api import bp as api_bp
+    app.register_blueprint(api_bp)
+
     if not app.debug:
         if not os.path.exists('logs'):
             os.mkdir('logs')
