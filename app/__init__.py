@@ -40,6 +40,9 @@ def create_app(config_class=Config):
     from app.api import bp as api_bp
     app.register_blueprint(api_bp)
 
+    from app import cli
+    app.cli.add_command(cli.cli)
+
     if not app.debug:
         if not os.path.exists('logs'):
             os.mkdir('logs')
