@@ -1,0 +1,20 @@
+<!doctype html>
+<html>
+<head>
+    {% include 'includes/_head.html' with context %}
+</head>
+<body>
+    <header>
+        {% include 'includes/_header.html' %}
+    </header>
+
+    <main>
+        {% block content %}
+        {% endblock %}
+    </main>
+
+    <footer>
+        {% include 'includes/_footer.html' %}
+    </footer>
+</body>
+</html>
