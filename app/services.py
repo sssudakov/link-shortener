@@ -2,10 +2,14 @@ from app import db
 from app.repositories import LinkRepository
 from app.utils import generate_short_code
 from flask import current_app
-from werkzeug.exceptions import NotFound
+from werkzeug.exceptions import NotFound, BadRequest
+import validators
 
 
 def create_short_link(original_url):
+    if not validators.url(original_url):
+        raise BadRequest("Invalid URL format.")
+
     link_repo = LinkRepository(db.session)
     link = link_repo.get_by_original_url(original_url)
     if link:

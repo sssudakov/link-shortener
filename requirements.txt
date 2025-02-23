@@ -11,3 +11,4 @@ rq
 rq-scheduler
 shortuuid
 flask-restx
+validators
