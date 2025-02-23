@@ -8,12 +8,14 @@ services:
       - DATABASE_URL=postgresql://user:password@db:5432/link_shortener
       - REDIS_URL=redis://redis:6379/0
       - PYTHONPATH=/app
+      - MIGRATIONS_DIR=migrations
     depends_on:
       - db
       - redis
     volumes:
       - ./app:/app/app # for development
       - ./logs:/app/logs
+      - ./migrations:/app/migrations
     networks:
       - app_net
 
@@ -48,7 +50,6 @@ services:
       - POSTGRES_DB=link_shortener
     volumes:
       - postgres_data:/var/lib/postgresql/data
-      - ./db-data:/docker-entrypoint-initdb.d
     networks:
       - app_net
 
