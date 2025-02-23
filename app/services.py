@@ -1,3 +1,4 @@
+from datetime import datetime, timedelta
 from app import db
 from app.error import ERROR_LINK_WITH_CODE_NOT_FOUND, ERROR_INVALID_URL
 from app.exceptions import InvalidUrlError, LinkNotFoundError
@@ -7,7 +8,7 @@ from flask import current_app
 import validators
 
 
-def create_short_link(original_url):
+def create_short_link(original_url, expiration_days=30):
     if not validators.url(original_url):
         raise InvalidUrlError(ERROR_INVALID_URL)
 
@@ -20,7 +21,8 @@ def create_short_link(original_url):
     while link_repo.get_by_short_code(short_code) is not None:
         short_code = generate_short_code(original_url)
 
-    link = link_repo.create(original_url, short_code)
+    expires_at = datetime.utcnow() + timedelta(days=expiration_days)
+    link = link_repo.create(original_url, short_code, expires_at=expires_at)
     return link
 
 def get_original_url(code):

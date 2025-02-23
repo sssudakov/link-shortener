@@ -25,8 +25,14 @@ def create_app(config_class=Config):
     app.task_queue = rq.Queue('link-shortener-tasks', connection=app.redis)
     scheduler = Scheduler(queue=app.task_queue, connection=app.redis)
 
-    from app.tasks import update_clicks_periodically
+    from app.tasks import update_clicks_periodically, delete_expired_links
 
+    scheduler.schedule(
+        scheduled_time=datetime.utcnow(),
+        func=delete_expired_links,
+        interval=3600,
+        repeat=None
+    )
     scheduler.schedule(
         scheduled_time=datetime.utcnow(),
         func=update_clicks_periodically,

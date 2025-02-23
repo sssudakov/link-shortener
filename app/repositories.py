@@ -5,8 +5,8 @@ class LinkRepository:
     def __init__(self, db_session):
         self.db_session = db_session
 
-    def create(self, original_url, short_code):
-        link = Link(original_url=original_url, short_code=short_code)
+    def create(self, original_url, short_code, expires_at):
+        link = Link(original_url=original_url, short_code=short_code, expires_at=expires_at)
         self.db_session.add(link)
         self.db_session.commit()
         return link

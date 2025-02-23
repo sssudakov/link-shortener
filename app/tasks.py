@@ -1,4 +1,7 @@
+from datetime import datetime
+
 from app import db, create_app
+from app.models import Link
 from app.repositories import LinkRepository
 
 def update_clicks_periodically():
@@ -26,3 +29,13 @@ def update_clicks_periodically():
                 app.logger.warning(f"Link with code {code} not found during click update.")
 
             app.redis.delete(key)
+
+def delete_expired_links():
+    app = create_app()
+    with app.app_context():
+        link_repo = LinkRepository(db.session)
+        expired_links = Link.query.filter(Link.expires_at <= datetime.utcnow(), Link.deleted_at == None).all()
+
+        for link in expired_links:
+            app.logger.info(f"Deleting expired link: {link.short_code}")
+            link_repo.soft_delete(link)

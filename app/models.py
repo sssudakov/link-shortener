@@ -9,3 +9,4 @@ class Link(db.Model):
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
     clicks = db.Column(db.Integer, default=0)
     deleted_at = db.Column(db.DateTime, nullable=True)
+    expires_at = db.Column(db.DateTime, nullable=True)
