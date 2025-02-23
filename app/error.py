@@ -1,0 +1,6 @@
+ERROR_INVALID_URL = 'Invalid URL'
+ERROR_LINK_NOT_FOUND = 'Link not found'
+ERROR_LINK_WITH_CODE_NOT_FOUND = 'Link with code {code} not found'
+ERROR_OCCURRED_WHILE_CREATING_SHORT_LINK = 'An error occurred while creating the short link.'
+ERROR_NOT_FOUND = 'Not found'
+ERROR_BAD_REQUEST = 'Bad request'

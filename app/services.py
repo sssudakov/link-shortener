@@ -1,14 +1,15 @@
 from app import db
+from app.error import ERROR_LINK_WITH_CODE_NOT_FOUND, ERROR_INVALID_URL
+from app.exceptions import InvalidUrlError, LinkNotFoundError
 from app.repositories import LinkRepository
 from app.utils import generate_short_code
 from flask import current_app
-from werkzeug.exceptions import NotFound, BadRequest
 import validators
 
 
 def create_short_link(original_url):
     if not validators.url(original_url):
-        raise BadRequest("Invalid URL format.")
+        raise InvalidUrlError(ERROR_INVALID_URL)
 
     link_repo = LinkRepository(db.session)
     link = link_repo.get_by_original_url(original_url)
@@ -16,13 +17,8 @@ def create_short_link(original_url):
         return link
 
     short_code = generate_short_code()
-    while True:
-        try:
-            link_repo.get_by_short_code(short_code)
-            short_code = generate_short_code()
-            break
-        except NotFound:
-            break
+    while link_repo.get_by_short_code(short_code) is not None:
+        short_code = generate_short_code(original_url)
 
     link = link_repo.create(original_url, short_code)
     return link
@@ -36,7 +32,7 @@ def get_original_url(code):
     else:
         link = link_repo.get_by_short_code(code)
         if not link:
-            raise NotFound(description=f"Link with code '{code}' not found")
+            raise LinkNotFoundError(ERROR_LINK_WITH_CODE_NOT_FOUND.format(code=code))
 
         current_app.redis.setex(code, 3600, link.original_url)
         url = link.original_url
@@ -50,7 +46,7 @@ def get_link_by_code(code):
     link = link_repo.get_by_short_code(code)
 
     if link is None:
-        raise NotFound(description=f"Link with code '{code}' not found.")
+        raise LinkNotFoundError(ERROR_LINK_WITH_CODE_NOT_FOUND.format(code=code))
 
     return link
 
@@ -58,26 +54,26 @@ def soft_delete_link(code):
     link_repo = LinkRepository(db.session)
     link = link_repo.get_by_short_code(code)
     if link is None:
-        raise NotFound(description=f"Link with code '{code}' not found.")
+        raise LinkNotFoundError(ERROR_LINK_WITH_CODE_NOT_FOUND.format(code=code))
     link_repo.soft_delete(link)
 
 def delete_link(code):
     link_repo = LinkRepository(db.session)
     link = link_repo.get_by_short_code(code)
     if link is None:
-        raise NotFound(description=f"Link with code '{code}' not found.")
+        raise LinkNotFoundError(ERROR_LINK_WITH_CODE_NOT_FOUND.format(code=code))
     link_repo.delete(link)
 
 def update_link(code, **kwargs):
     link_repo = LinkRepository(db.session)
     link = link_repo.get_by_short_code(code)
     if link is None:
-        raise NotFound(description=f"Link with code '{code}' not found.")
+        raise LinkNotFoundError(ERROR_LINK_WITH_CODE_NOT_FOUND.format(code=code))
     return link_repo.update(link, **kwargs)
 
 def restore_link(code):
     link_repo = LinkRepository(db.session)
     link = link_repo.get_by_short_code(code)
     if link is None:
-        raise NotFound(description=f"Link with code '{code}' not found.")
+        raise LinkNotFoundError(ERROR_LINK_WITH_CODE_NOT_FOUND.format(code=code))
     link_repo.restore(link)
