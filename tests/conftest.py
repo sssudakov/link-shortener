@@ -1,7 +1,6 @@
 import os
 
 import pytest
-from flask import session
 
 from app import create_app, db, Config
 from app.models import Link
