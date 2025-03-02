@@ -1,4 +1,6 @@
 from flask import Blueprint, render_template, redirect, request, url_for, flash, current_app
+
+from app.flashes import FLASH_LINK_DELETED_SUCCESSFULLY
 from app.services import create_short_link, get_original_url, get_link_by_code, soft_delete_link
 from werkzeug.exceptions import BadRequest, NotFound
 from app.exceptions import InvalidUrlError, LinkNotFoundError
@@ -46,7 +48,7 @@ def short_link(code):
 def delete_link_route(code):
     try:
         soft_delete_link(code)
-        flash('Link deleted successfully!')
+        flash(FLASH_LINK_DELETED_SUCCESSFULLY)
     except LinkNotFoundError:
         flash(ERROR_LINK_NOT_FOUND)
 

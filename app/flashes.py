@@ -1,0 +1,1 @@
+FLASH_LINK_DELETED_SUCCESSFULLY = 'Link deleted successfully!'

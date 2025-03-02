@@ -63,8 +63,6 @@ services:
   tests:
     build: .
     command: pytest -s
-    ports:
-      - "8002:8000"
     environment:
       - DATABASE_URL=postgresql://user:password@db:5432/link_shortener
       - REDIS_URL=redis://redis:6379/0
@@ -73,6 +71,8 @@ services:
     depends_on:
       - db
       - redis
+    volumes:
+      - ./tests:/app/tests # for tests development
     networks:
       - app_net
 
