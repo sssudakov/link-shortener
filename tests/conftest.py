@@ -9,8 +9,12 @@ from app.models import Link
 
 class TestConfig(Config):
     TESTING = True
-    SQLALCHEMY_DATABASE_URI = os.environ.get(
-        'TEST_DATABASE_URL') or 'postgresql://user:password@localhost:5432/test_link_shortener'
+
+    class TestConfig(Config):
+        TESTING = True
+        SQLALCHEMY_DATABASE_URI = os.environ.get('TEST_DATABASE_URL') or \
+                                  'postgresql://user:password@db:5432/test_link_shortener'
+        REDIS_URL = os.environ.get('REDIS_URL') or 'redis://redis:6379/0'
 
 @pytest.fixture(scope="session")
 def app():
