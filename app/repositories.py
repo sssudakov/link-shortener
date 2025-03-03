@@ -34,7 +34,9 @@ class LinkRepository:
     def get_by_original_url(self, original_url):
         return Link.query.filter_by(original_url=original_url, deleted_at=None).first()
 
-    def get_by_short_code(self, short_code):
+    def get_by_short_code(self, short_code, soft_deleted=False):
+        if soft_deleted:
+            return Link.query.filter_by(short_code=short_code).first()
         return Link.query.filter_by(short_code=short_code, deleted_at=None).first()
 
     def get_original_url_by_short_code(self, short_code):
