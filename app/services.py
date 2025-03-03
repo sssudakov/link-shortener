@@ -57,14 +57,14 @@ def soft_delete_link(code):
     link = link_repo.get_by_short_code(code)
     if link is None:
         raise LinkNotFoundError(ERROR_LINK_WITH_CODE_NOT_FOUND.format(code=code))
-    link_repo.soft_delete(link)
+    return link_repo.soft_delete(link)
 
 def delete_link(code):
     link_repo = LinkRepository(db.session)
     link = link_repo.get_by_short_code(code)
     if link is None:
         raise LinkNotFoundError(ERROR_LINK_WITH_CODE_NOT_FOUND.format(code=code))
-    link_repo.delete(link)
+    return link_repo.delete(link)
 
 def update_link(code, **kwargs):
     link_repo = LinkRepository(db.session)
@@ -75,7 +75,7 @@ def update_link(code, **kwargs):
 
 def restore_link(code):
     link_repo = LinkRepository(db.session)
-    link = link_repo.get_by_short_code(code)
+    link = link_repo.get_by_short_code(code, soft_deleted=True)
     if link is None:
         raise LinkNotFoundError(ERROR_LINK_WITH_CODE_NOT_FOUND.format(code=code))
-    link_repo.restore(link)
+    return link_repo.restore(link)
