@@ -15,8 +15,10 @@ jobs:
     steps:
     - name: Debug Environment Variables
       run: |
+        set -x
         echo "DATABASE_URL: ${{ secrets.DATABASE_URL }}"
         echo "REDIS_URL: ${{ secrets.REDIS_URL }}"
+        echo "POSTGRES_USER: ${{ secrets.POSTGRES_USER }}"
     - name: Checkout code
       uses: actions/checkout@v4
 
