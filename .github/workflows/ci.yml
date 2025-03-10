@@ -15,13 +15,13 @@ jobs:
     steps:
     - name: Debug Environment Variables
       run: |
-        echo "DATABASE_URL: ${{ secrets.DATABASE_URL }}"
-        echo "REDIS_URL: ${{ secrets.REDIS_URL }}"
-        echo "POSTGRES_USER: ${{ secrets.POSTGRES_USER }}"
-        echo "POSTGRES_PASSWORD: ${{ secrets.POSTGRES_PASSWORD }}"
-        echo "POSTGRES_DB: ${{ secrets.POSTGRES_DB }}"
-        echo "POSTGRES_TEST_DB: ${{ secrets.POSTGRES_TEST_DB }}"
-        echo "TEST_DATABASE_URL: ${{ secrets.TEST_DATABASE_URL }}"
+        echo "DATABASE_URL: ${{ secrets.environment.DATABASE_URL }}"
+        echo "REDIS_URL: ${{ secrets.environment.REDIS_URL }}"
+        echo "POSTGRES_USER: ${{ secrets.environment.POSTGRES_USER }}"
+        echo "POSTGRES_PASSWORD: ${{ secrets.environment.POSTGRES_PASSWORD }}"
+        echo "POSTGRES_DB: ${{ secrets.environment.POSTGRES_DB }}"
+        echo "POSTGRES_TEST_DB: ${{ secrets.environment.POSTGRES_TEST_DB }}"
+        echo "TEST_DATABASE_URL: ${{ secrets.environment.TEST_DATABASE_URL }}"
 
     - name: Checkout code
       uses: actions/checkout@v4
@@ -35,19 +35,19 @@ jobs:
     - name: Start services
       run: docker compose up -d db redis
       env:
-        REDIS_URL: ${{ secrets.REDIS_URL }}
-        POSTGRES_USER: ${{ secrets.POSTGRES_USER }}
-        POSTGRES_PASSWORD: ${{ secrets.POSTGRES_PASSWORD }}
-        POSTGRES_DB: ${{ secrets.POSTGRES_DB }}
-        DATABASE_URL: ${{ secrets.DATABASE_URL }}
+        REDIS_URL: ${{ secrets.environment.REDIS_URL }}
+        POSTGRES_USER: ${{ secrets.environment.POSTGRES_USER }}
+        POSTGRES_PASSWORD: ${{ secrets.environment.POSTGRES_PASSWORD }}
+        POSTGRES_DB: ${{ secrets.environment.POSTGRES_DB }}
+        DATABASE_URL: ${{ secrets.environment.DATABASE_URL }}
 
     - name: Run tests
       run: docker compose run --rm tests pytest -s
       env:
-        REDIS_URL: ${{ secrets.REDIS_URL }}
-        POSTGRES_USER: ${{ secrets.POSTGRES_USER }}
-        POSTGRES_PASSWORD: ${{ secrets.POSTGRES_PASSWORD }}
-        POSTGRES_DB: ${{ secrets.POSTGRES_DB }}
-        DATABASE_URL: ${{ secrets.DATABASE_URL }}
-        POSTGRES_TEST_DB: ${{ secrets.POSTGRES_TEST_DB }}
-        TEST_DATABASE_URL: ${{ secrets.TEST_DATABASE_URL }}
+        REDIS_URL: ${{ secrets.environment.REDIS_URL }}
+        POSTGRES_USER: ${{ secrets.environment.POSTGRES_USER }}
+        POSTGRES_PASSWORD: ${{ secrets.environment.POSTGRES_PASSWORD }}
+        POSTGRES_DB: ${{ secrets.environment.POSTGRES_DB }}
+        DATABASE_URL: ${{ secrets.environment.DATABASE_URL }}
+        POSTGRES_TEST_DB: ${{ secrets.environment.POSTGRES_TEST_DB }}
+        TEST_DATABASE_URL: ${{ secrets.environment.TEST_DATABASE_URL }}
