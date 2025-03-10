@@ -10,6 +10,7 @@ on:
 
 jobs:
   test:
+    environment: Short Link Env
     runs-on: ubuntu-latest
 
     steps:
