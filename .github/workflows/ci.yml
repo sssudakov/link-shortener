@@ -13,6 +13,16 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+    - name: Debug Environment Variables
+      run: |
+        echo "DATABASE_URL: ${{ secrets.DATABASE_URL }}"
+        echo "REDIS_URL: ${{ secrets.REDIS_URL }}"
+        echo "POSTGRES_USER: ${{ secrets.POSTGRES_USER }}"
+        echo "POSTGRES_PASSWORD: ${{ secrets.POSTGRES_PASSWORD }}"
+        echo "POSTGRES_DB: ${{ secrets.POSTGRES_DB }}"
+        echo "POSTGRES_TEST_DB: ${{ secrets.POSTGRES_TEST_DB }}"
+        echo "TEST_DATABASE_URL: ${{ secrets.TEST_DATABASE_URL }}"
+
     - name: Checkout code
       uses: actions/checkout@v4
 
