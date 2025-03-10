@@ -24,6 +24,20 @@ jobs:
 
     - name: Start services
       run: docker compose up -d db redis
+      env:
+        REDIS_URL: ${{ secrets.REDIS_URL }}
+        POSTGRES_USER: ${{ secrets.POSTGRES_USER }}
+        POSTGRES_PASSWORD: ${{ secrets.POSTGRES_PASSWORD }}
+        POSTGRES_DB: ${{ secrets.POSTGRES_DB }}
+        DATABASE_URL: ${{ secrets.DATABASE_URL }}
 
     - name: Run tests
       run: docker compose run --rm tests pytest -s
+      env:
+        REDIS_URL: ${{ secrets.REDIS_URL }}
+        POSTGRES_USER: ${{ secrets.POSTGRES_USER }}
+        POSTGRES_PASSWORD: ${{ secrets.POSTGRES_PASSWORD }}
+        POSTGRES_DB: ${{ secrets.POSTGRES_DB }}
+        DATABASE_URL: ${{ secrets.DATABASE_URL }}
+        POSTGRES_TEST_DB: ${{ secrets.POSTGRES_TEST_DB }}
+        TEST_DATABASE_URL: ${{ secrets.TEST_DATABASE_URL }}
